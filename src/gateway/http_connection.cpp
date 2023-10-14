@@ -261,7 +261,7 @@ void HttpConnection::HttpParserOnMessageComplete() {
         return;
     }
 
-    HLOG(WARNING) << "@@@ http_parser_parse_url returns successfully."
+    HLOG(WARNING) << "@@@ http_parser_parse_url returns successfully.";
 
     std::string_view path;
     if (!ReadParsedUrlField(&parsed_url, UF_PATH, url_buffer_.data(), &path)) {
