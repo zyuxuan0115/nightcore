@@ -221,8 +221,10 @@ FuncWorker* Dispatcher::PickIdleWorker() {
     size_t max_concurrency = DetermineConcurrencyLimit();
     max_concurrency_stat_.AddSample(gsl::narrow_cast<uint32_t>(max_concurrency));
     if (running_workers_.size() >= max_concurrency) {
-        VLOG(1) << "@@@ zyuxuan: running_workers_.size() >= max_concurrency";
         return nullptr;
+    }
+    if (idle_workers_.empty()) {
+        VLOG(1) << "@@@ zyuxuan: idle_workers_.empty()";
     }
     while (!idle_workers_.empty()) {
         uint16_t client_id = idle_workers_.back();
