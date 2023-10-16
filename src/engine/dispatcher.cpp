@@ -221,6 +221,7 @@ FuncWorker* Dispatcher::PickIdleWorker() {
     size_t max_concurrency = DetermineConcurrencyLimit();
     max_concurrency_stat_.AddSample(gsl::narrow_cast<uint32_t>(max_concurrency));
     if (running_workers_.size() >= max_concurrency) {
+        VLOG(WARNING) << "@@@ zyuxuan: running_workers_.size() >= max_concurrency";
         return nullptr;
     }
     while (!idle_workers_.empty()) {
@@ -231,6 +232,7 @@ FuncWorker* Dispatcher::PickIdleWorker() {
         }
     }
     MayRequestNewFuncWorker();
+    VLOG(WARNING) << "@@@ zyuxuan:MayRequestNewFuncWorker()";
     return nullptr;
 }
 
