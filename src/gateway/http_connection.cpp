@@ -251,8 +251,6 @@ static std::string QueryStringToJSON(std::string_view qs) {
 
 void HttpConnection::HttpParserOnMessageComplete() {
     StopRecvData();
-    HLOG(WARNING) << "Start parsing URL: " << std::string(url_buffer_.data(), url_buffer_.length());
-
     HVLOG(1) << "Start parsing URL: " << std::string(url_buffer_.data(), url_buffer_.length());
     http_parser_url parsed_url;
     if (http_parser_parse_url(url_buffer_.data(), url_buffer_.length(), 0, &parsed_url) != 0) {

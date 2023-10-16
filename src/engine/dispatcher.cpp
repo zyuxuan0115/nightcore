@@ -74,10 +74,14 @@ bool Dispatcher::OnFuncWorkerConnected(std::shared_ptr<FuncWorker> func_worker) 
         idle_workers_.push_back(client_id);
         if (idle_workers_.empty()){
             HLOG(INFO) << "@@@ zyuxuan: OnFuncWorkerConnected, !DispatchPendingFuncCall(func_worker.get()), idle_worker empty";
-
         }
         else {
             HLOG(INFO) << "@@@ zyuxuan: OnFuncWorkerConnected, !DispatchPendingFuncCall(func_worker.get()), idle_worker non-empty";
+            size_t total_workers = workers_.size();
+            size_t running_workers = running_workers_.size();
+            size_t idle_workers = total_workers - running_workers;
+            VLOG(1) << fmt::format("@@@ zyuxuan: running_workers={}, idle_workers={}", running_workers, idle_workers);
+ 
         }
     }
     UpdateWorkerLoadStat();
