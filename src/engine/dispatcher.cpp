@@ -69,7 +69,11 @@ bool Dispatcher::OnFuncWorkerConnected(std::shared_ptr<FuncWorker> func_worker) 
                                   client_id,
                                   (GetMonotonicMicroTimestamp() - request_timestamp) / 1000);
     }
+
+    HLOG(INFO) << "@@@ zyuxuan: OnFuncWorkerConnected";
+
     if (!DispatchPendingFuncCall(func_worker.get())) {
+        HLOG(INFO) << "@@@ zyuxuan: OnFuncWorkerConnected, !DispatchPendingFuncCall(func_worker.get())";
         idle_workers_.push_back(client_id);
     }
     UpdateWorkerLoadStat();
@@ -234,7 +238,6 @@ FuncWorker* Dispatcher::PickIdleWorker() {
         }
     }
     MayRequestNewFuncWorker();
-    VLOG(1) << "@@@ zyuxuan:MayRequestNewFuncWorker()";
     return nullptr;
 }
 
