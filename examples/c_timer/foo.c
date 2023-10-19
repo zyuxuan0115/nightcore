@@ -37,14 +37,15 @@ int faas_func_call(void* worker_handle, const char* input, size_t input_length) 
     struct worker_context* context = (struct worker_context*)worker_handle;
     const char* bar_output;
     size_t bar_output_length;
+    FILE* fp = fopen( "out_file.txt", "w" ); 
     clock_t start = clock();
     int ret = context->invoke_func_fn(
         context->caller_context, "Bar", input, input_length,
         &bar_output, &bar_output_length);
     clock_t end = clock(); 
     float duration = (float)(end - start) / CLOCKS_PER_SEC;
-    printf("@@@ call invocation time is %f\n", duration);
-
+    fprintf(fp, "@@@ call invocation time is %f\n", duration);
+    fclose(fp);
     if (ret != 0) {
         return -1;
     }
