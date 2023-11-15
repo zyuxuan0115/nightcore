@@ -38,9 +38,16 @@ int faas_func_call(void* worker_handle, const char* input, size_t input_length) 
     const char* bar_output;
     size_t bar_output_length;
     FILE* fp = fopen( "out_file.txt", "w" ); 
+    size_t real_input_length = 4096;
+    const char* real_input;
+    char tmp[real_input_length];
+    for (int i=0; i<real_input_length; i++){
+       tmp[i] = 'a';
+    }
+    real_input = tmp;
     clock_t start = clock();
     int ret = context->invoke_func_fn(
-        context->caller_context, "Bar", input, input_length,
+        context->caller_context, "Bar", real_input, real_input_length,
         &bar_output, &bar_output_length);
     clock_t end = clock(); 
     float duration = (float)(end - start) / CLOCKS_PER_SEC;

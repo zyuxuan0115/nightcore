@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h>
+#include <time.h>
 
 #include <faas/worker_v1_interface.h>
 
@@ -31,15 +31,29 @@ int faas_destroy_func_worker(void* worker_handle) {
     return 0;
 }
 
-static const char* kOutputSuffix = ", World\n";
+static const char* kOutputPrefix = "From function Bar: ";
 
 int faas_func_call(void* worker_handle, const char* input, size_t input_length) {
     struct worker_context* context = (struct worker_context*)worker_handle;
-    char output_buffer[1] = {'a'};
-//    memcpy(output_buffer, input, input_length);
-//    memcpy(output_buffer + input_length, kOutputSuffix, sizeof(kOutputSuffix));
-//    context->append_output_fn(context->caller_context,
-//                              output_buffer, 1);
-//    free(output_buffer);
+    const char* bar_output;
+    size_t bar_output_length;
+    FILE* fp = fopen( "out_file.txt", "w" ); 
+    clock_t start = clock();
+    int ret = context->invoke_func_fn(
+        context->caller_context, "Bar", input, input_length,
+        &bar_output, &bar_output_length);
+    clock_t end = clock(); 
+    float duration = (float)(end - start) / CLOCKS_PER_SEC;
+    fprintf(fp, "@@@ call invocation time is %f\n", duration);
+    fclose(fp);
+    if (ret != 0) {
+        return -1;
+    }
+    char* output_buffer = (char*)malloc(strlen(kOutputPrefix) + bar_output_length);
+    memcpy(output_buffer, kOutputPrefix, strlen(kOutputPrefix));
+    memcpy(output_buffer + strlen(kOutputPrefix), bar_output, bar_output_length);
+    context->append_output_fn(context->caller_context,
+                              output_buffer, strlen(kOutputPrefix) + bar_output_length);
+    free(output_buffer);
     return 0;
 }

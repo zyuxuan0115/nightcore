@@ -35,11 +35,11 @@ static const char* kOutputSuffix = ", World\n";
 
 int faas_func_call(void* worker_handle, const char* input, size_t input_length) {
     struct worker_context* context = (struct worker_context*)worker_handle;
-    char output_buffer[1] = {'a'};
+    char output_buffer[1]; 
 //    memcpy(output_buffer, input, input_length);
 //    memcpy(output_buffer + input_length, kOutputSuffix, sizeof(kOutputSuffix));
-//    context->append_output_fn(context->caller_context,
-//                              output_buffer, 1);
+    context->append_output_fn(context->caller_context,
+                              output_buffer, 1);
 //    free(output_buffer);
     return 0;
 }
