@@ -38,7 +38,7 @@ int faas_func_call(void* worker_handle, const char* input, size_t input_length) 
     const char* bar_output;
     size_t bar_output_length;
     FILE* fp = fopen( "out_file.txt", "w" ); 
-    size_t real_input_length = 512;
+    size_t real_input_length = 256;
     const char* real_input;
     char tmp[real_input_length];
     for (int i=0; i<real_input_length; i++){
